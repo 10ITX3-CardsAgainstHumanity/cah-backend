@@ -1,0 +1,26 @@
+{
+  "name": "cah-backend",
+  "version": "0.0.0",
+  "description": "cah-backend",
+  "main": "index.js",
+  "scripts": {
+    "prod": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/10ITX3-CardsAgainstHumanity/cah-backend.git"
+  },
+  "author": "Max Schäfer <contact@maxrs.de>",
+  "license": "SEE LICENSE IN <LICENSE.md>",
+  "bugs": {
+    "url": "https://github.com/10ITX3-CardsAgainstHumanity/cah-backend/issues"
+  },
+  "homepage": "https://github.com/10ITX3-CardsAgainstHumanity/cah-backend#readme",
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}

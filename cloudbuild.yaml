@@ -1,0 +1,7 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t' 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME' ]
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [ 'beta', 'run', 'deploy', '--image', 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME', '--region', 'europe-west1','--memory', '256Mi', '--timout', '900', '--concurrency', '100', '--allow-unauthenticated' ]
