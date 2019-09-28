@@ -6,3 +6,6 @@
 
 # log files
 *.log
+
+# compiled output
+/dist

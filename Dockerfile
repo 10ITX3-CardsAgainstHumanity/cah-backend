@@ -7,6 +7,6 @@ ENV HOST 0.0.0.0
 
 COPY . .
 
-RUN npm install --only=production
+RUN npm install
 
 CMD npm run prod
