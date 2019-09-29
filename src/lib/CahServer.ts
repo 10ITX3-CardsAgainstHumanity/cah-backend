@@ -1,8 +1,10 @@
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
+import * as fs from 'fs';
 
-//import * as Game from 'Game';
-//import * as Payer from 'Player';
+import { Game } from './Game';
+import { Player } from './Player';
+import {Socket} from "socket.io";
 
 export class CahServer {
 
@@ -31,15 +33,50 @@ export class CahServer {
       console.log(`running CahServer on port ${this.port}`);
 	});
 
-    this.io.on('connect', (socket: any) => {
+    var allGames = {};
+
+    this.io.on('connect', (socket: Socket) => {
       console.log(`+ ${socket.id}`);
 
-      setInterval(() => {
-      	this.io.emit('time', Date.now());
-	  }, 1000);
+      let player: Player = null;
+      let game: Game = null;
 
+      //game.create
+      socket.on('game.create', ({ username }, res) => {
+        if (player || game) {
+          res({ status: false, msg: 'error' });
+          return;
+        }
+        player = new Player(username, socket);
+        game = new Game(player);
+        allGames[game.id] = game;
+        socket.join(game.id);
+        game.room = this.io.to(game.id);
+        res({ status: true, msg: game.id });
+      });
+
+      //game.join
+      socket.on('game.join', ({ username, gameId }, res) => {
+        if (player || game) {
+          res({ status: false, msg: 'error' });
+          return;
+        }
+        player = new Player(username, socket);
+        game = allGames[gameId];
+        if (!game) {
+          res({ status: false, msg: 'invalid game' });
+          return;
+        }
+        game.addPlayer(player);
+        res({ status: true, msg: 'joined game' });
+      });
+
+      //disconnect
       socket.on('disconnect', () => {
         console.log(`- ${socket.id}`);
+        if (game !== null && player !== null) {
+          game.removePlayer(player);
+		}
 	  });
 	});
   }

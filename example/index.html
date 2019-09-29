@@ -1,0 +1,18 @@
+<script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+<script>
+
+  var socket = io('http://localhost');
+
+  function createGame(username) {
+	socket.emit('game.create', { username: username }, (data) => {
+	  console.log(data);
+	});
+  }
+
+  function joinGame(username, gameId) {
+    socket.emit('game.join', { username: username, gameId: gameId }, (data) => {
+      console.log(data);
+    });
+  }
+
+</script>
