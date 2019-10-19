@@ -51,7 +51,7 @@ export class CahServer {
         game = new Game(player, maxScore);
         allGames[game.id] = game;
         socket.join(game.id);
-        game.room = this.io.to(game.id);
+        game.socket = this.io.to(game.id);
         res({ status: true, msg: game.id });
       });
 

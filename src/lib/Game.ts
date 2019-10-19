@@ -10,7 +10,7 @@ enum GameState {
 export class Game {
 
   public readonly id: string;
-  public room: any;
+  public socket: any;
   private state: GameState;
   private hostPlayer: Player;
   private players: Array<Player>;
@@ -30,6 +30,9 @@ export class Game {
     }
     this.players.push(player);
     player.socket.join(this.id);
+    this.socket.emit('player.join', { id: player.id, username: player.username });
+    player.socket.on('game.leave', args => this.removePlayer(player));
+    return true;
   }
 
   public removePlayer(player: Player): boolean {
@@ -37,6 +40,9 @@ export class Game {
       return false;
     }
     this.players = this.players.filter(p => p.id !== player.id);
+    player.socket.leaveAll();
+    player.socket.removeAllListeners();
+    this.socket.emit('player.leave', { id: player.id, username: player.username });
     return true;
   }
 
