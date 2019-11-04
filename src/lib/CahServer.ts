@@ -47,11 +47,14 @@ export class CahServer {
           res({ status: false, msg: 'error' });
           return;
         }
+
         player = new Player(username, socket);
         game = new Game(player, maxScore);
-        allGames[game.id] = game;
-        socket.join(game.id);
+
         game.socket = this.io.to(game.id);
+        allGames[game.id] = game;
+        game.addPlayer(player);
+
         res({ status: true, msg: game.id });
       });
 
@@ -61,13 +64,16 @@ export class CahServer {
           res({ status: false, msg: 'error' });
           return;
         }
+
         player = new Player(username, socket);
+
         game = allGames[gameId];
         if (!game) {
           res({ status: false, msg: 'invalid game' });
           return;
         }
         game.addPlayer(player);
+
         res({ status: true, msg: 'joined game' });
       });
 

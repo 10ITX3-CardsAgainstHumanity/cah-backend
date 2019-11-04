@@ -1,11 +1,7 @@
 import { v4 } from 'uuid';
 
+import { GameState } from '../types';
 import { Player } from './Player';
-
-enum GameState {
-  'undefined',
-  'lobby'
-}
 
 export class Game {
 
@@ -40,10 +36,16 @@ export class Game {
       return false;
     }
     this.players = this.players.filter(p => p.id !== player.id);
-    player.socket.leaveAll();
-    player.socket.removeAllListeners();
+    player.disconnect();
     this.socket.emit('player.leave', { id: player.id, username: player.username });
     return true;
   }
 
+  private start():void {
+    if (this.state !== GameState.lobby) {
+      return;
+    }
+
+    //this.enterSelection(); // TODO: Implement this function
+  }
 }

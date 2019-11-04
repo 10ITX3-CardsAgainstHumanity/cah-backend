@@ -3,16 +3,36 @@
 
   var socket = io('http://localhost');
 
-  function createGame(username) {
-	socket.emit('game.create', { username: username }, (data) => {
-	  console.log(data);
+  function createGame(username, maxScore) {
+	socket.emit('game.create', { username: username, maxScore: maxScore }, (data) => {
+	  console.log('game.create', data);
 	});
   }
 
   function joinGame(username, gameId) {
     socket.emit('game.join', { username: username, gameId: gameId }, (data) => {
-      console.log(data);
+      console.log('game.join', data);
     });
   }
+
+  function leaveGame() {
+      socket.emit('game.leave');
+  }
+
+  function getAllCardTexts() {
+      socket.emit('player.cards');
+  }
+
+  socket.on('player.join', (data) => {
+      console.log('player.join', data);
+  });
+
+  socket.on('player.leave', (data) => {
+     console.log('player.leave', data);
+  });
+
+  socket.on('player.cards.res', (data) => {
+     console.log('player.cards.res', data);
+  });
 
 </script>
