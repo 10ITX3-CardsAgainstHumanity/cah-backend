@@ -10,14 +10,12 @@ export class Game {
   private state: GameState;
   private hostPlayer: Player;
   private players: Array<Player>;
-  private maxScore: number;
 
-  constructor(hostPlayer: Player, maxScore: number) {
+  constructor(hostPlayer: Player) {
     this.id = v4();
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
     this.players = Array<Player>();
-    this.maxScore = maxScore;
   }
 
   public addPlayer(player: Player): boolean {

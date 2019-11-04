@@ -3,8 +3,8 @@
 
   var socket = io('http://localhost');
 
-  function createGame(username, maxScore) {
-	socket.emit('game.create', { username: username, maxScore: maxScore }, (data) => {
+  function createGame(username) {
+	socket.emit('game.create', { username: username }, (data) => {
 	  console.log('game.create', data);
 	});
   }
