@@ -21,7 +21,7 @@ export class Player {
   }
 
   private _getAllCardTexts() {
-      this.socket.emit('player.cards.res', this.getAllCardTexts());
+      this.socket.emit('player.cards.res', this.getAllCards());
   }
 
   private fillCardDeck() {
@@ -56,12 +56,10 @@ export class Player {
       }
   }
 
-  private getAllCardTexts(): any {
-      let res = [];
-      this.whiteCards.forEach((card) => {
-          res.push(card.getText());
+  private getAllCards(): any {
+      return this.whiteCards.map((card) => {
+         return card;
       });
-      return res;
   }
 
   public disconnect(): void {
