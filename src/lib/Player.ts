@@ -15,7 +15,8 @@ export class Player {
     this.socket = socket;
     this.score = 0;
     this.whiteCards = new Array<WhiteCard>();
-    this.fillCardDeck();
+    this.fillCardDeck().then();
+
 
     this.socket.on('player.cards', args => this._getAllCardTexts());
   }
@@ -24,18 +25,10 @@ export class Player {
       this.socket.emit('player.cards.res', this.getAllCards());
   }
 
-  private fillCardDeck() {
-      // todo cleanup
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
-      this.addCard();
+  private async fillCardDeck() {
+      while (this.whiteCards.length < 10) {
+          await this.addCard();
+      }
   }
 
   private async addCard(): Promise<void> {
@@ -54,6 +47,7 @@ export class Player {
               isNewCardValid = true;
           }
       }
+      return Promise.resolve();
   }
 
   private getAllCards(): any {
