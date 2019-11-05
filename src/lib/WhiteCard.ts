@@ -18,7 +18,7 @@ export class WhiteCard implements Card {
             this.id = card.id;
             this.text = card.text;
         } catch (err) {
-            console.error(err);
+            throw new Error(err);
         }
     }
 
@@ -33,8 +33,8 @@ export class WhiteCard implements Card {
                     }
                 });
             }
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            throw new Error(err);
         }
     }
 
