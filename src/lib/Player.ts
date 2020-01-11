@@ -22,7 +22,7 @@ export class Player {
   }
 
   private _getAllCardTexts() {
-      this.socket.emit('player.cards.res', this.getAllCards());
+      this.socket.emit('player.cards', this.getAllCards());
   }
 
   private async fillCardDeck() {

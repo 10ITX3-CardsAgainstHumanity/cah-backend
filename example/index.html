@@ -3,36 +3,42 @@
 
   var socket = io('http://localhost');
 
+  // game.create
+
   function createGame(username) {
-	socket.emit('game.create', { username: username }, (data) => {
-	  console.log('game.create', data);
-	});
+	socket.emit('game.create', { username: username });
   }
 
+  socket.on('game.create', data => console.log('game.create', data));
+
+  // game.join
+
   function joinGame(username, gameId) {
-    socket.emit('game.join', { username: username, gameId: gameId }, (data) => {
-      console.log('game.join', data);
-    });
+    socket.emit('game.join', { username: username, gameId: gameId });
   }
+
+  socket.on('game.join', data => console.log('game.join', data));
+
+  // game.leave
 
   function leaveGame() {
       socket.emit('game.leave');
   }
 
+  // player.cards
+
   function getAllCardTexts() {
-      socket.emit('player.cards');
+      socket.emit('player.cards', {});
   }
 
-  socket.on('player.join', (data) => {
-      console.log('player.join', data);
-  });
+  socket.on('player.cards', data => console.log('player.cards', data));
 
-  socket.on('player.leave', (data) => {
-     console.log('player.leave', data);
-  });
+  // player.join
 
-  socket.on('player.cards.res', (data) => {
-     console.log('player.cards.res', data);
-  });
+  socket.on('player.join', data => console.log('player.join', data));
+
+  // player.leave
+
+  socket.on('player.leave', data => console.log('player.leave', data));
 
 </script>

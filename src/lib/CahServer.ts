@@ -42,9 +42,9 @@ export class CahServer {
       let game: Game = null;
 
       //game.create
-      socket.on('game.create', ({ username }, res) => {
+      socket.on('game.create', ({ username }) => {
         if (player || game) {
-          res({ status: false, msg: 'error' });
+          socket.emit('game.create', { status: false, msg: 'error' });
           return;
         }
 
@@ -55,13 +55,13 @@ export class CahServer {
         allGames[game.id] = game;
         game.addPlayer(player);
 
-        res({ status: true, msg: game.id });
+        socket.emit('game.create', { status:true, msg: game.id });
       });
 
       //game.join
-      socket.on('game.join', ({ username, gameId }, res) => {
+      socket.on('game.join', ({ username, gameId }) => {
         if (player || game) {
-          res({ status: false, msg: 'error' });
+          socket.emit('game.join', { status: false, msg: 'error' });
           return;
         }
 
@@ -69,12 +69,12 @@ export class CahServer {
 
         game = allGames[gameId];
         if (!game) {
-          res({ status: false, msg: 'invalid game' });
+          socket.emit('game.join', { status: false, msg: 'invalid game' });
           return;
         }
         game.addPlayer(player);
 
-        res({ status: true, msg: 'joined game' });
+        socket.emit('game.join', { status: true, msg: 'joined game' });
       });
 
       //disconnect
