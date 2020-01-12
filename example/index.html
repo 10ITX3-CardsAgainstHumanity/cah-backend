@@ -5,8 +5,8 @@
 
   // game.create
 
-  function createGame(username) {
-	socket.emit('game.create', { username: username });
+  function createGame(username, gameId) {
+	socket.emit('game.create', { username: username, gameId: gameId });
   }
 
   socket.on('game.create', data => console.log('game.create', data));

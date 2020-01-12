@@ -42,14 +42,14 @@ export class CahServer {
       let game: Game = null;
 
       //game.create
-      socket.on('game.create', ({ username }) => {
+      socket.on('game.create', ({ username, gameId }) => {
         if (player || game) {
           socket.emit('game.create', { status: false, msg: 'error' });
           return;
         }
 
         player = new Player(username, socket);
-        game = new Game(player);
+        game = new Game(player, gameId);
 
         game.socket = this.io.to(game.id);
         allGames[game.id] = game;

@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 import { GameState } from '../types';
 import { Player } from './Player';
 import { BlackCard } from "./BlackCard";
@@ -15,8 +13,8 @@ export class Game {
   private blackCardHistory: Array<BlackCard>;
   private players: Array<Player>;
 
-  constructor(hostPlayer: Player) {
-    this.id = v4();
+  constructor(hostPlayer: Player, gameId: string) {
+    this.id = gameId;
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
     this.players = Array<Player>();
