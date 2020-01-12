@@ -70,6 +70,8 @@ export class CahServer {
         game = allGames[gameId];
         if (!game) {
           socket.emit('game.join', { status: false, msg: 'invalid game' });
+          game = undefined;
+          player = undefined;
           return;
         }
         game.addPlayer(player);
@@ -80,9 +82,9 @@ export class CahServer {
       //disconnect
       socket.on('disconnect', () => {
         console.log(`- ${socket.id}`);
-        if (game !== null && player !== null) {
+        if (game && player) {
           game.removePlayer(player);
-		}
+        }
 	  });
 	});
   }
