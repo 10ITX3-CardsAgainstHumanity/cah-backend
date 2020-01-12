@@ -9,6 +9,7 @@ export class Game {
   public socket: any;
   private state: GameState;
   private hostPlayer: Player;
+  private czar: Player;
   private players: Array<Player>;
 
   constructor(hostPlayer: Player) {
@@ -16,6 +17,8 @@ export class Game {
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
     this.players = Array<Player>();
+
+    this.hostPlayer.socket.on('game.start', args => this.start());
   }
 
   public addPlayer(player: Player): boolean {
@@ -39,11 +42,35 @@ export class Game {
     return true;
   }
 
+  private chooseCzar(): void {
+      let setCzarState: boolean = false;
+      let player: Player = null;
+      while (!setCzarState) {
+          player = this.players[Math.floor(Math.random() * this.players.length)];
+          setCzarState = this.setCzar(player);
+      }
+      this.socket.emit('player.czar', { id: player.id, username: player.username });
+  }
+
+  private setCzar(player: Player): boolean {
+      if (player === this.czar) {
+          return false;
+      }
+
+      this.czar = player;
+      return true;
+  }
+
   private start():void {
     if (this.state !== GameState.lobby) {
       return;
     }
 
+    this.chooseCzar();
+
+    this.socket.emit('game.start', { status: true });
+
     //this.enterSelection(); // TODO: Implement this function
   }
+
 }

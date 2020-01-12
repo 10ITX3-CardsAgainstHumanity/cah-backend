@@ -25,6 +25,14 @@
       socket.emit('game.leave');
   }
 
+  // game.start
+
+  function startGame() {
+      socket.emit('game.start');
+  }
+
+  socket.on('game.start', data => console.log('game.start', data));
+
   // player.cards
 
   function getAllCardTexts() {
@@ -40,5 +48,9 @@
   // player.leave
 
   socket.on('player.leave', data => console.log('player.leave', data));
+
+  // player.czar
+
+  socket.on('player.czar', data => console.log('player.czar', data));
 
 </script>
