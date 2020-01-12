@@ -41,6 +41,14 @@
 
   socket.on('player.cards', data => console.log('player.cards', data));
 
+  // player.cards.choose
+
+  function chooseCard(cardId) {
+      socket.emit('player.cards.choose', { cardId: cardId });
+  }
+
+  socket.on('player.cards.choose', data => console.log('player.cards.choose', data));
+
   // player.join
 
   socket.on('player.join', data => console.log('player.join', data));
@@ -52,5 +60,9 @@
   // player.czar
 
   socket.on('player.czar', data => console.log('player.czar', data));
+
+  // game.cards.black
+
+  socket.on('game.cards.black', data => console.log('game.cards.black', data));
 
 </script>

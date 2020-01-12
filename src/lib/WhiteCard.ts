@@ -8,7 +8,18 @@ export class WhiteCard implements Card {
     private id: string;
     public text: string;
 
-    public constructor() {
+    public constructor(id: string = null, text: string = null) {
+        this.id = id;
+        this.text = text;
+    }
+
+    // @ts-ignore
+    public static getById(cardId: string): WhiteCard {
+        WhiteCard.cards.forEach((card) => {
+            if (card.id === cardId) {
+                return new WhiteCard(card.id, card.text);
+            }
+        });
     }
 
     public async init(): Promise<any> {
@@ -27,10 +38,7 @@ export class WhiteCard implements Card {
             const snapshot = await WhiteCard.db.get();
             if (snapshot) {
                 return snapshot.docs.map((doc: any) => {
-                    return {
-                        id: doc.id,
-                        text: doc.data().text
-                    }
+                    return new WhiteCard(doc.id, doc.data().text);
                 });
             }
         } catch (err) {

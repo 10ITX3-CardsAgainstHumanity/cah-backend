@@ -7,6 +7,7 @@ export class Player {
   public readonly username: string;
   public readonly socket: Socket;
   public readonly score: number;
+  public readonly choosedCards: Array<WhiteCard>;
   public readonly whiteCards: Array<WhiteCard>;
 
   constructor(username: string, socket: Socket) {
@@ -17,8 +18,8 @@ export class Player {
     this.whiteCards = new Array<WhiteCard>();
     this.fillCardDeck().then();
 
-
     this.socket.on('player.cards', args => this._getAllCardTexts());
+    this.socket.on('player.cards.choose', args => this.chooseCard(WhiteCard.getById(args.cardId)));
   }
 
   private _getAllCardTexts() {
@@ -54,6 +55,17 @@ export class Player {
       return this.whiteCards.map((card) => {
          return card;
       });
+  }
+
+  public chooseCard(card: WhiteCard): void {
+      let whiteCardsIds = this.whiteCards.map((card) => {
+          return card.getId();
+      });
+      if (whiteCardsIds.includes(card.getId())) {
+          this.socket.emit('player.cards.choose', { status: true });
+      } else {
+          this.socket.emit('player.cards.choose', { status: false, msg: 'Player does not have this card' });
+      }
   }
 
   public disconnect(): void {
