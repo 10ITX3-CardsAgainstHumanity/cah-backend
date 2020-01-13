@@ -4,7 +4,7 @@ import { Firestore } from '@google-cloud/firestore';
 export class WhiteCard implements Card {
 
     private static db: any = new Firestore().collection('answers');
-    private static cards: any;
+    public static cards: Array<WhiteCard> = new Array<WhiteCard>();
     private id: string;
     public text: string;
 
@@ -13,13 +13,14 @@ export class WhiteCard implements Card {
         this.text = text;
     }
 
-    // @ts-ignore
     public static getById(cardId: string): WhiteCard {
-        WhiteCard.cards.forEach((card) => {
-            if (card.id === cardId) {
-                return new WhiteCard(card.id, card.text);
+        let card: WhiteCard;
+        WhiteCard.cards.forEach((actCard: WhiteCard) => {
+            if (cardId === actCard.getId()) {
+                card = actCard;
             }
         });
+        return card;
     }
 
     public async init(): Promise<any> {
