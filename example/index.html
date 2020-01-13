@@ -65,4 +65,12 @@
 
   socket.on('game.cards.black', data => console.log('game.cards.black', data));
 
+  // game.state
+
+  socket.on('game.state', data => console.log('game.state', data));
+
+  // player.cards.ready
+
+  socket.on('player.cards.ready', data => console.log('player.cards.ready', data));
+
 </script>

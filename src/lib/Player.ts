@@ -15,15 +15,16 @@ export class Player {
     this.username = username;
     this.socket = socket;
     this.score = 0;
+    this.choosedCards = new Array<WhiteCard>();
     this.whiteCards = new Array<WhiteCard>();
-    this.fillCardDeck().then();
+    this.fillCardDeck().then(() => { this.socket.emit('player.cards.ready', { status: true }) });
 
     this.socket.on('player.cards', args => this._getAllCardTexts());
-    this.socket.on('player.cards.choose', args => this.chooseCard(WhiteCard.getById(args.cardId)));
+    this.socket.on('player.cards.choose', args => this._chooseCard(args.cardId));
   }
 
   private _getAllCardTexts() {
-      this.socket.emit('player.cards', this.getAllCards());
+      this.socket.emit('player.cards', { status: true, msg: { cards: this.getAllCards() }});
   }
 
   private async fillCardDeck() {
@@ -57,15 +58,29 @@ export class Player {
       });
   }
 
-  public chooseCard(card: WhiteCard): void {
-      let whiteCardsIds = this.whiteCards.map((card) => {
-          return card.getId();
+  private hasPlayerThisCard(card: WhiteCard) {
+      let whiteCardsIds = this.whiteCards.map((c: WhiteCard) => {
+          return c.getId();
       });
-      if (whiteCardsIds.includes(card.getId())) {
-          this.socket.emit('player.cards.choose', { status: true });
-      } else {
+      return whiteCardsIds.includes(card.getId());
+  }
+
+  public _chooseCard(cardId: string): void {
+      let card: WhiteCard = WhiteCard.getById(cardId);
+      this.chooseCard(card);
+  }
+
+  public chooseCard(card: WhiteCard): void {
+      if (!this.hasPlayerThisCard(card)) {
           this.socket.emit('player.cards.choose', { status: false, msg: 'Player does not have this card' });
       }
+
+      this.choosedCards.push(card);
+
+      // @ts-ignore
+      delete this.whiteCards[card];
+
+      this.socket.emit('player.cards.choose', { status: true });
   }
 
   public disconnect(): void {

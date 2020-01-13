@@ -98,10 +98,33 @@ export class Game {
 
     this.chooseCzar();
     this.chooseBlackCard();
+    this.selection();
 
     this.socket.emit('game.start', { status: true });
 
     //this.enterSelection(); // TODO: Implement this function
+  }
+
+  private emitGameState(): void {
+      this.socket.emit('game.state', { status: true, msg: { state: GameState[this.state] } });
+  }
+
+  private selection(): void {
+      this.state = GameState.selection
+      this.emitGameState();
+      let phase = setInterval(() => {
+          let areAllPlayersReady = true;
+          this.players.forEach((player: Player) => {
+              if (player.choosedCards.length !== this.blackCard.getNeededAnswers()) {
+                  areAllPlayersReady = false
+              }
+          });
+          if (areAllPlayersReady) {
+              clearInterval(phase);
+              this.state = GameState.judging;
+              this.emitGameState();
+          }
+      }, 2500);
   }
 
 }
