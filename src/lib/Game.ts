@@ -31,7 +31,10 @@ export class Game {
     }
     this.players.push(player);
     player.socket.join(this.id);
-    this.socket.emit('player.join', { id: player.id, username: player.username });
+    this.socket.emit('player.join', { status: true, msg: {
+        id: player.id,
+        username: player.username
+    }});
     player.socket.on('game.leave', args => this.removePlayer(player));
     return true;
   }
@@ -42,7 +45,10 @@ export class Game {
     }
     this.players = this.players.filter(p => p.id !== player.id);
     player.disconnect();
-    this.socket.emit('player.leave', { id: player.id, username: player.username });
+    this.socket.emit('player.leave', { status: true, msg: {
+        id: player.id,
+        username: player.username
+    }});
     return true;
   }
 
@@ -53,7 +59,13 @@ export class Game {
           player = this.players[Math.floor(Math.random() * this.players.length)];
           setCzarState = this.setCzar(player);
       }
-      this.socket.emit('player.czar', { id: player.id, username: player.username });
+      this.socket.emit('player.czar', {
+          status: true,
+          msg: {
+              id: player.id,
+              username: player.username
+          }
+      });
   }
 
   private setCzar(player: Player): boolean {
