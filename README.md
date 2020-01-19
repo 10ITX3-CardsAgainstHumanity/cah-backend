@@ -20,6 +20,7 @@
         - [When a new black card is choosed](#when-a-new-black-card-is-choosed)
         - [When the player card deck is ready](#when-the-player-card-deck-is-ready)
         - [When the game state has changed](#when-the-game-state-has-changed)
+        - [When all Player choosed their cards they get every other](#when-all-player-choosed-their-cards-they-get-every-other)
 
 # Documentation
 
@@ -228,6 +229,30 @@ Join a game as a player
   "msg": {
     "state": /src/types.ts->GameState
   }
+}
+```
+
+<br />
+
+## When all Player choosed their cards they get every other
+
+    game.players.cards
+
+### Response
+```json
+{
+  "status": true,
+  "msg": [
+    {
+      "playerId": String,
+      "cards": [
+        {
+          "id": String,
+          "text": String
+        }
+      ]
+    }
+  ] 
 }
 ```
 

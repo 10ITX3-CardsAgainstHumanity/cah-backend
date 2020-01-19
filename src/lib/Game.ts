@@ -1,6 +1,7 @@
 import { GameState } from '../types';
 import { Player } from './Player';
 import { BlackCard } from "./BlackCard";
+import { WhiteCard } from "./WhiteCard";
 
 export class Game {
 
@@ -108,13 +109,11 @@ export class Game {
       return;
     }
 
+    this.socket.emit('game.start', { status: true });
+
     this.chooseCzar();
     this.chooseBlackCard();
     this.selection();
-
-    this.socket.emit('game.start', { status: true });
-
-    //this.enterSelection(); // TODO: Implement this function
   }
 
   private emitGameState(): void {
@@ -122,7 +121,7 @@ export class Game {
   }
 
   private selection(): void {
-      this.state = GameState.selection
+      this.state = GameState.selection;
       this.emitGameState();
       let phase = setInterval(() => {
           let areAllPlayersReady = true;
@@ -133,10 +132,27 @@ export class Game {
           });
           if (areAllPlayersReady) {
               clearInterval(phase);
-              this.state = GameState.judging;
-              this.emitGameState();
+              this.emitAllChoosedPlayerCards();
+              this.judging();
           }
       }, 2500);
+  }
+
+  private emitAllChoosedPlayerCards(): void {
+      let msg: any = [];
+      this.players.forEach((player: Player) => {
+          let cards: any = [];
+          player.choosedCards.forEach((card: WhiteCard) => {
+              cards = [ ...cards, { id: card.getId(), text: card.getText() } ];
+          });
+          msg = [ ...msg, { playerId: player.id, cards: cards } ];
+      });
+      this.socket.emit('game.players.cards', { status: true, msg: msg });
+  }
+
+  private judging(): void {
+      this.state = GameState.judging;
+      this.emitGameState();
   }
 
 }
