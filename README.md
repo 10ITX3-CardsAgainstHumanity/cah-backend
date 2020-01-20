@@ -66,7 +66,13 @@ Join a game as a player
 ### Response
 ```json
 {
-  "status": true
+  "status": true,
+  "msg": {
+    "player": {
+      "id": String,
+      "username": String
+    }
+  }
 }
 ```
 
