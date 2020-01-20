@@ -140,6 +140,25 @@ Join a game as a player
 
 <br />
 
+## Get all players in current game
+
+    game.players
+    
+### Response
+```json
+{
+  "status": true,
+  "msg": {
+    "players": [
+      {
+        "id": String,
+        "username": String
+      }
+    ]
+  }
+}
+```
+
 # On
 
 ## When a player joined

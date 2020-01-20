@@ -49,6 +49,15 @@
 
   socket.on('player.cards.choose', data => console.log('player.cards.choose', data));
 
+  // game.player
+
+  function getAllPlayers() {
+      socket.emit('game.players');
+  }
+
+  socket.on('game.players', data => console.log('game.players', data));
+
+
   // player.join
 
   socket.on('player.join', data => console.log('player.join', data));

@@ -37,7 +37,21 @@ export class Game {
         username: player.username
     }});
     player.socket.on('game.leave', args => this.removePlayer(player));
+    player.socket.on('game.players', args => this.emitAllPlayers(player));
     return true;
+  }
+
+  public emitAllPlayers(player: Player): any {
+      let players: any = this.players.map((player: Player) => {
+          return {
+              id: player.id,
+              username: player.username
+          }
+      });
+
+      player.socket.emit('game.players', { status: true, msg: {
+          players: players
+      }});
   }
 
   public removePlayer(player: Player): boolean {
