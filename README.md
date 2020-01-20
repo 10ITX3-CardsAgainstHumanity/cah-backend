@@ -40,6 +40,8 @@ Create a game as a host
 }
 ```
 
+*Also emiits a `game.join`*
+
 ### Response
 ```json
 {
