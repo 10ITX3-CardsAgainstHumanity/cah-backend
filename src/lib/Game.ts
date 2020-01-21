@@ -1,4 +1,4 @@
-import { GameState } from '../types';
+import { GameState, PlayerResponse } from '../types';
 import { Player } from './Player';
 import { BlackCard } from "./BlackCard";
 import { WhiteCard } from "./WhiteCard";
@@ -32,17 +32,15 @@ export class Game {
     }
     this.players.push(player);
     player.socket.join(this.id);
-    this.socket.emit('player.join', { status: true, msg: {
-        id: player.id,
-        username: player.username
-    }});
+    let playerResponse: PlayerResponse = { id: player.id, username: player.username };
+    this.socket.emit('player.join', { status: true, msg: playerResponse });
     player.socket.on('game.leave', args => this.removePlayer(player));
     player.socket.on('game.players', args => this.emitAllPlayers(player));
     return true;
   }
 
-  public emitAllPlayers(player: Player): any {
-      let players: any = this.players.map((player: Player) => {
+  public emitAllPlayers(player: Player): void {
+      let playersInActualGame: Partial<Player>[] = this.players.map((player: Player) => {
           return {
               id: player.id,
               username: player.username
@@ -50,7 +48,7 @@ export class Game {
       });
 
       player.socket.emit('game.players', { status: true, msg: {
-          players: players
+          players: playersInActualGame
       }});
   }
 
@@ -60,10 +58,8 @@ export class Game {
     }
     this.players = this.players.filter(p => p.id !== player.id);
     player.disconnect();
-    this.socket.emit('player.leave', { status: true, msg: {
-        id: player.id,
-        username: player.username
-    }});
+    let playerResponse: PlayerResponse = { id: player.id, username: player.username };
+    this.socket.emit('player.leave', { status: true, msg: playerResponse});
     return true;
   }
 
@@ -74,13 +70,8 @@ export class Game {
           player = this.players[Math.floor(Math.random() * this.players.length)];
           setCzarState = this.setCzar(player);
       }
-      this.socket.emit('player.czar', {
-          status: true,
-          msg: {
-              id: player.id,
-              username: player.username
-          }
-      });
+      let playerResponse: PlayerResponse = { id: player.id, username: player.username };
+      this.socket.emit('player.czar', { status: true, msg: playerResponse });
   }
 
   private setCzar(player: Player): boolean {

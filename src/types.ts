@@ -9,3 +9,8 @@ export interface Card {
     readonly text: string;
     getText(): string;
 }
+
+export interface PlayerResponse {
+    id: String,
+    username: String
+}
