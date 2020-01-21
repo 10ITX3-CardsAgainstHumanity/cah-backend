@@ -12,5 +12,6 @@ export interface Card {
 
 export interface PlayerResponse {
     id: String,
-    username: String
+    username: String,
+    isCzar?: boolean
 }

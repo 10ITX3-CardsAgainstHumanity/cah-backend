@@ -152,7 +152,8 @@ Join a game as a player
     "players": [
       {
         "id": String,
-        "username": String
+        "username": String,
+        "isCzar": Boolean
       }
     ]
   }

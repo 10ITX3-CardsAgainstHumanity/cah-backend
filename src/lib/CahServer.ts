@@ -49,9 +49,8 @@ export class CahServer {
         }
 
         player = new Player(username, socket);
-        game = new Game(player, gameId);
+        game = new Game(player, gameId, this.io.to(gameId));
 
-        game.socket = this.io.to(game.id);
         allGames[game.id] = game;
         game.addPlayer(player);
 

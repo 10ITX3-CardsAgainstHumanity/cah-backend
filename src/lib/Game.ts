@@ -14,7 +14,8 @@ export class Game {
   private blackCardHistory: Array<BlackCard>;
   private players: Array<Player>;
 
-  constructor(hostPlayer: Player, gameId: string) {
+  constructor(hostPlayer: Player, gameId: string, socket: any) {
+    this.socket = socket;
     this.id = gameId;
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
@@ -23,6 +24,7 @@ export class Game {
 
     BlackCard.init();
 
+    this.setCzar(hostPlayer);
     this.hostPlayer.socket.on('game.start', args => this.start());
   }
 
@@ -43,7 +45,8 @@ export class Game {
       let playersInActualGame: Partial<Player>[] = this.players.map((player: Player) => {
           return {
               id: player.id,
-              username: player.username
+              username: player.username,
+              isCzar: player.id === this.czar.id
           }
       });
 
@@ -116,7 +119,7 @@ export class Game {
 
     this.socket.emit('game.start', { status: true });
 
-    this.chooseCzar();
+    !this.czar ? this.chooseCzar() : '';
     this.chooseBlackCard();
     this.selection();
   }
