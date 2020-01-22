@@ -42,11 +42,11 @@ export class Game {
   }
 
   public emitAllPlayers(player: Player): void {
-      let playersInActualGame: Partial<Player>[] = this.players.map((player: Player) => {
+      let playersInActualGame: Partial<Player>[] = this.players.map((playerInActualGame: Player) => {
           return {
-              id: player.id,
-              username: player.username,
-              isCzar: player.id === this.czar.id
+              id: playerInActualGame.id,
+              username: playerInActualGame.username,
+              isCzar: playerInActualGame.id === this.czar.id
           }
       });
 
