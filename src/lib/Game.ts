@@ -19,8 +19,8 @@ export class Game {
     this.id = gameId;
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
-    this.players = Array<Player>();
-    this.blackCardHistory = Array<BlackCard>();
+    this.players = [];
+    this.blackCardHistory = [];
 
     BlackCard.init();
 

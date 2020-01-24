@@ -15,9 +15,9 @@ export class Player {
     this.username = username;
     this.socket = socket;
     this.score = 0;
-    this.choosedCards = new Array<WhiteCard>();
-    this.whiteCards = new Array<WhiteCard>();
-    this.fillCardDeck().then(() => { this.socket.emit('player.cards.ready', { status: true }) });
+    this.choosedCards = [];
+    this.whiteCards = [];
+    this.fillCardDeck().then(() => { this.socket.emit('player.cards.ready', { status: true } as ResponseMessage) });
 
     this.socket.on('player.cards', args => this._getAllCardTexts());
     this.socket.on('player.cards.choose', args => this._chooseCard(args.cardId));

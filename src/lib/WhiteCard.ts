@@ -4,8 +4,8 @@ import CollectionReference = FirebaseFirestore.CollectionReference;
 
 export class WhiteCard implements Card {
 
-    private static db: any = new Firestore().collection('answers');
-    public static cards: Array<WhiteCard> = new Array<WhiteCard>();
+    private static db: CollectionReference = new Firestore().collection('answers');
+    public static cards: Array<WhiteCard> = [];
     private id: string;
     public text: string;
 
