@@ -17,7 +17,7 @@ export class BlackCard implements Card {
     }
 
     private static parseNeededAnswersOfText(text: string): number {
-        return text.match(new RegExp('___', 'g')).length;
+        return text.match(/([_]*)/g).length;
     }
 
     public static getById(cardId: string): BlackCard {
