@@ -14,14 +14,8 @@ export class WhiteCard implements Card {
         this.text = text;
     }
 
-    public static getById(cardId: string): WhiteCard {
-        let card: WhiteCard;
-        WhiteCard.cards.forEach((actCard: WhiteCard) => {
-            if (cardId === actCard.getId()) {
-                card = actCard;
-            }
-        });
-        return card;
+    public static getById(cardId: string): WhiteCard|null {
+        return WhiteCard.cards.find((card: WhiteCard) => cardId === card.getId());
     }
 
     public async init(): Promise<void> {
