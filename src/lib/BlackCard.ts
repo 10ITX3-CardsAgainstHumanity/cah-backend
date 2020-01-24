@@ -25,7 +25,14 @@ export class BlackCard implements Card {
     }
 
     public static async init(): Promise<any> {
-        BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
+        try {
+            BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
+            return Promise.resolve();
+        } catch (err) {
+            throw new err;
+            // TODO: Maybe do something better than throwing when a error happens
+            // try init again or reset the complete room and close it down but dont end the whole server like that
+        }
     }
 
     private static async getAllCardsFromDatabase(): Promise<BlackCard[]> {
