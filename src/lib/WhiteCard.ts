@@ -1,5 +1,6 @@
-import { Card } from '../types';
-import { Firestore } from '@google-cloud/firestore';
+import {Card} from '../types';
+import {Firestore} from '@google-cloud/firestore';
+import CollectionReference = FirebaseFirestore.CollectionReference;
 
 export class WhiteCard implements Card {
 
@@ -23,7 +24,7 @@ export class WhiteCard implements Card {
         return card;
     }
 
-    public async init(): Promise<any> {
+    public async init(): Promise<void> {
         try {
             WhiteCard.cards = await WhiteCard.getAllCardsFromDatabase();
             let card: any = WhiteCard.cards[Math.floor(Math.random() * WhiteCard.cards.length)];
@@ -34,7 +35,7 @@ export class WhiteCard implements Card {
         }
     }
 
-    private static async getAllCardsFromDatabase(): Promise<any[]> {
+    private static async getAllCardsFromDatabase(): Promise<WhiteCard[]> {
         try {
             const snapshot = await WhiteCard.db.get();
             if (snapshot) {
