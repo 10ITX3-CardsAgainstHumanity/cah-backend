@@ -78,8 +78,10 @@ export class Player {
 
       this.choosedCards.push(card);
 
-      // @ts-ignore
-      delete this.whiteCards[card];
+      const index = this.whiteCards.findIndex((card: WhiteCard) => card.getId() === card.getId());
+      if (index > -1) {
+        this.whiteCards.splice(index, 1);
+      }
 
 
       this.socket.emit('player.cards.choose', { status: true } as ResponseMessage);
