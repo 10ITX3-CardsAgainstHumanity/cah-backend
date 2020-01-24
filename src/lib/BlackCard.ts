@@ -1,11 +1,11 @@
 import { Card } from '../types';
 import { Firestore } from '@google-cloud/firestore';
-import {WhiteCard} from "./WhiteCard";
+import CollectionReference = FirebaseFirestore.CollectionReference;
 
 export class BlackCard implements Card {
 
-    private static db: any = new Firestore().collection('questions');
-    public static cards: any;
+    private static db: CollectionReference = new Firestore().collection('questions');
+    public static cards: BlackCard[];
     private readonly id: string;
     public readonly text: string;
     private readonly neededAnswers: number;
@@ -33,7 +33,7 @@ export class BlackCard implements Card {
         BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
     }
 
-    private static async getAllCardsFromDatabase(): Promise<any[]> {
+    private static async getAllCardsFromDatabase(): Promise<BlackCard[]> {
         try {
             const snapshot = await BlackCard.db.get();
             if (snapshot) {
