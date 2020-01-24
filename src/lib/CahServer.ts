@@ -33,7 +33,7 @@ export class CahServer {
       console.log(`running CahServer on port ${this.port}`);
 	});
 
-    var allGames = {};
+    const allGames = {};
 
     this.io.on('connect', (socket: Socket) => {
       console.log(`+ ${socket.id}`);
