@@ -1,10 +1,10 @@
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
-import * as fs from 'fs';
 
-import { Game } from './Game';
-import { Player } from './Player';
+import {Game} from './Game';
+import {Player} from './Player';
 import {Socket} from "socket.io";
+import {ResponseMessage} from "../types";
 
 export class CahServer {
 
@@ -44,7 +44,7 @@ export class CahServer {
       //game.create
       socket.on('game.create', ({ username, gameId }) => {
         if (player || game) {
-          socket.emit('game.create', { status: false, msg: 'error' });
+          socket.emit('game.create', { status: false, msg: 'error' } as ResponseMessage);
           return;
         }
 
@@ -54,19 +54,22 @@ export class CahServer {
         allGames[game.id] = game;
         game.addPlayer(player);
 
-        socket.emit('game.create', { status: true });
-        socket.emit('game.join', { status: true, msg: {
+        socket.emit('game.create', { status: true } as ResponseMessage);
+        socket.emit('game.join', {
+          status: true,
+          msg: {
             player: {
               id: player.id,
               username: player.username
             }
-        }});
+          }
+        } as ResponseMessage);
       });
 
       //game.join
       socket.on('game.join', ({ username, gameId }) => {
         if (player || game) {
-          socket.emit('game.join', { status: false, msg: 'error' });
+          socket.emit('game.join', { status: false, msg: 'error' } as ResponseMessage);
           return;
         }
 
@@ -74,19 +77,22 @@ export class CahServer {
 
         game = allGames[gameId];
         if (!game) {
-          socket.emit('game.join', { status: false, msg: 'invalid game' });
+          socket.emit('game.join', { status: false, msg: 'invalid game' } as ResponseMessage);
           game = undefined;
           player = undefined;
           return;
         }
         game.addPlayer(player);
 
-        socket.emit('game.join', { status: true, msg: {
-          player: {
-            id: player.id,
-            username: player.username
+        socket.emit('game.join', {
+          status: true,
+          msg: {
+            player: {
+              id: player.id,
+              username: player.username
+            }
           }
-        }});
+        } as ResponseMessage);
       });
 
       //disconnect
@@ -98,5 +104,4 @@ export class CahServer {
 	  });
 	});
   }
-
 }
