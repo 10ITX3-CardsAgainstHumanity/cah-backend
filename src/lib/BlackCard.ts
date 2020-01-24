@@ -20,13 +20,8 @@ export class BlackCard implements Card {
         return text.match(new RegExp('___', 'g')).length;
     }
 
-    // @ts-ignore
     public static getById(cardId: string): BlackCard {
-        BlackCard.cards.forEach((card) => {
-            if (card.id === cardId) {
-                return new BlackCard(card.id, card.text);
-            }
-        });
+        return BlackCard.cards.find((card: BlackCard) => card.id === cardId);
     }
 
     public static async init(): Promise<any> {
