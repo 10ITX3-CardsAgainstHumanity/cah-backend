@@ -21,7 +21,7 @@ export class WhiteCard implements Card {
     public async init(): Promise<void> {
         try {
             WhiteCard.cards = await WhiteCard.getAllCardsFromDatabase();
-            let card: any = WhiteCard.cards[Math.floor(Math.random() * WhiteCard.cards.length)];
+            let card: WhiteCard = WhiteCard.cards[Math.floor(Math.random() * WhiteCard.cards.length)];
             this.id = card.id;
             this.text = card.text;
         } catch (err) {
