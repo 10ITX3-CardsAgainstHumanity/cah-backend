@@ -22,9 +22,9 @@ export interface PlayerResponse {
 export interface ResponseMessage {
     status: boolean,
     msg?: {
-        state?: keyof GameState
+        state?: keyof typeof GameState
         player?: PlayerResponse,
-        card?: BlackCard,
-        cards?: WhiteCard[]
+        card?: Partial<BlackCard>,
+        cards?: Partial<WhiteCard>[]
     } | string
 }
