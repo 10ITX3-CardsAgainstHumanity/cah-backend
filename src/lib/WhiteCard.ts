@@ -24,7 +24,10 @@ export class WhiteCard implements Card {
             let card: WhiteCard = WhiteCard.cards[Math.floor(Math.random() * WhiteCard.cards.length)];
             this.id = card.id;
             this.text = card.text;
+            return Promise.resolve();
         } catch (err) {
+            // TODO: Maybe do something better than throwing when a error happens
+            // try init again or reset the complete room and close it down but dont end the whole server like that
             throw new Error(err);
         }
     }
@@ -38,6 +41,8 @@ export class WhiteCard implements Card {
                 });
             }
         } catch (err) {
+            // TODO: Maybe do something better than throwing when a error happens
+            // try init again or reset the complete room and close it down but dont end the whole server like that
             throw new Error(err);
         }
     }
