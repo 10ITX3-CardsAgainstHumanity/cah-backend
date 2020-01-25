@@ -42,11 +42,11 @@ export class Game {
         }
     } as ResponseMessage);
     player.socket.on('game.leave', args => this.removePlayer(player));
-    player.socket.on('game.players', args => this.emitAllPlayers(player));
+    player.socket.on('game.players', args => this.emitAllPlayers(player.socket));
     return true;
   }
 
-  public emitAllPlayers(player: Player): void {
+  public emitAllPlayers(responseSocket: Socket): void {
       let playersInActualGame: Partial<Player>[] = this.players.map((playerInActualGame: Player) => {
           return {
               id: playerInActualGame.id,
