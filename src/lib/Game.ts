@@ -51,6 +51,7 @@ export class Game {
           return {
               id: playerInActualGame.id,
               username: playerInActualGame.username,
+              score: playerInActualGame.score,
               isCzar: playerInActualGame.id === this.czar.id
           }
       });

@@ -153,6 +153,7 @@ Join a game as a player
       {
         "id": String,
         "username": String,
+        "score": Int,
         "isCzar": Boolean
       }
     ]
