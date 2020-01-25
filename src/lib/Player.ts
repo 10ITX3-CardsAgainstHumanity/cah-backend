@@ -7,7 +7,7 @@ export class Player {
   public readonly id: string;
   public readonly username: string;
   public readonly socket: Socket;
-  public readonly score: number;
+  public score: number;
   public readonly choosedCards: Array<WhiteCard>;
   public readonly whiteCards: Array<WhiteCard>;
 
@@ -59,7 +59,7 @@ export class Player {
       });
   }
 
-  private hasPlayerThisCard(card: WhiteCard): boolean {
+  public hasPlayerThisCard(card: WhiteCard): boolean {
       let whiteCardsIds = this.whiteCards.map((c: WhiteCard) => {
           return c.getId();
       });
@@ -85,6 +85,10 @@ export class Player {
 
 
       this.socket.emit('player.cards.choose', { status: true } as ResponseMessage);
+  }
+
+  public countScoreOneUp(): void {
+      this.score++;
   }
 
   public disconnect(): void {

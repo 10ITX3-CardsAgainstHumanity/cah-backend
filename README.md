@@ -161,6 +161,26 @@ Join a game as a player
 }
 ```
 
+## Choose a card as czar
+
+    game.czar.judge
+    
+### Request
+```json
+{
+  "playerId": String
+}
+```
+
+### Respone
+```json
+{
+  "status": true
+}
+```
+
+<br />
+
 # On
 
 ## When a player joined
@@ -282,6 +302,25 @@ Join a game as a player
       ]
     }
   ] 
+}
+```
+
+<br />
+
+## When the czar choosed a winner
+
+    game.czar.judged
+    
+### Response
+```json
+{
+  "status": true,
+  "msg": {
+    "player": {
+      "id": String,
+      "username": String
+    }
+  }
 }
 ```
 

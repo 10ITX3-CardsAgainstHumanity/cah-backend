@@ -14,6 +14,7 @@ export class Game {
   private blackCard: BlackCard;
   private blackCardHistory: Array<BlackCard>;
   private players: Array<Player>;
+  private czarSelectedWinner: Player;
 
   constructor(hostPlayer: Player, gameId: string, socket: any) {
     this.socket = socket;
@@ -56,7 +57,7 @@ export class Game {
           }
       });
 
-      player.socket.emit('game.players', {
+      responseSocket.emit('game.players', {
           status: true,
           msg: {
               players: playersInActualGame
@@ -78,6 +79,16 @@ export class Game {
         }
     } as ResponseMessage);
     return true;
+  }
+
+  private isThisCardInThisRound(card) {
+      let cardValid: boolean = false;
+      this.players.forEach((player: Player) => {
+          if (player.hasPlayerThisCard(card)) {
+              cardValid = true;
+          }
+      });
+      return cardValid;
   }
 
   private chooseCzar(): void {
@@ -102,7 +113,23 @@ export class Game {
       }
 
       this.czar = player;
+      this.czar.socket.on('game.czar.judge', args => this.czarChooseWinner(args.playerId));
       return true;
+  }
+
+  private czarChooseWinner(playerId: string): void {
+      if (this.state === GameState.judging) {
+          let validPlayer: Player = this.players.find((player: Player) => player.id === playerId);
+          if (validPlayer) {
+              this.czarSelectedWinner = validPlayer;
+              this.czarSelectedWinner.countScoreOneUp();
+              this.czar.socket.emit('game.czar.judge', { status: true } as ResponseMessage);
+          } else {
+              this.czar.socket.emit('game.czar.judge', { status: false, msg: 'invalid player' } as ResponseMessage);
+          }
+      } else {
+          this.czar.socket.emit('game.czar.judge', {status: false, msg: 'invalid game state'} as ResponseMessage);
+      }
   }
 
   private chooseBlackCard(): void {
@@ -182,11 +209,37 @@ export class Game {
           });
           msg = [ ...msg, { playerId: player.id, cards: cards } ];
       });
-      this.socket.emit('game.players.cards', { status: true, msg: msg });
+      this.socket.emit('game.players.cards', { status: true, msg: msg } as ResponseMessage);
   }
 
   private judging(): void {
       this.state = GameState.judging;
       this.emitGameState();
+      this.czarSelectedWinner = null;
+
+      let phase = setInterval(() => {
+          let hasCzarJudged = this.czarSelectedWinner;
+          if (hasCzarJudged) {
+              clearInterval(phase);
+              let winnerPlayer: Partial<Player> = {
+                  id: this.czarSelectedWinner.id,
+                  username: this.czarSelectedWinner.username
+              };
+              this.socket.emit('game.czar.judged', { status: true, msg: {
+                  player: winnerPlayer
+              }} as ResponseMessage);
+              this.overview();
+          }
+      }, 2500);
+
+  }
+
+  private overview() : void {
+      this.state = GameState.overview;
+      this.emitGameState();
+      this.emitAllPlayers(this.socket);
+      setTimeout(() => {
+          this.start();
+      }, 5000);
   }
 }

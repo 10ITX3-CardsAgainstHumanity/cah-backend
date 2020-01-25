@@ -57,6 +57,17 @@
 
   socket.on('game.players', data => console.log('game.players', data));
 
+  // game.czar.judge
+
+  function judgeAsCzar(playerId) {
+      socket.emit('game.czar.judge', { playerId: playerId });
+  }
+
+  socket.on('game.czar.judge', data => console.log('game.czar.judge', data));
+
+  // game.czar.judged
+
+  socket.on('game.czar.judged', data => console.log('game.czar.judged', data));
 
   // player.join
 
