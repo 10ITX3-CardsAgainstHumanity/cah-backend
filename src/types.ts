@@ -6,7 +6,8 @@ export enum GameState {
     'undefined',
     'lobby',
     'selection',
-    'judging'
+    'judging',
+    'overview'
 }
 
 export interface Card {
