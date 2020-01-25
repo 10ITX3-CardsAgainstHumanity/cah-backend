@@ -1,12 +1,13 @@
-import { GameState, PlayerResponse } from '../types';
-import { Player } from './Player';
-import { BlackCard } from "./BlackCard";
-import { WhiteCard } from "./WhiteCard";
+import {GameState, ResponseMessage} from '../types';
+import {Player} from './Player';
+import {BlackCard} from "./BlackCard";
+import {WhiteCard} from "./WhiteCard";
+import {Socket} from "socket.io";
 
 export class Game {
 
   public readonly id: string;
-  public socket: any;
+  public socket: Socket;
   private state: GameState;
   private hostPlayer: Player;
   private czar: Player;
@@ -19,8 +20,8 @@ export class Game {
     this.id = gameId;
     this.state = GameState.lobby;
     this.hostPlayer = hostPlayer;
-    this.players = Array<Player>();
-    this.blackCardHistory = Array<BlackCard>();
+    this.players = [];
+    this.blackCardHistory = [];
 
     BlackCard.init();
 
@@ -34,8 +35,12 @@ export class Game {
     }
     this.players.push(player);
     player.socket.join(this.id);
-    let playerResponse: PlayerResponse = { id: player.id, username: player.username };
-    this.socket.emit('player.join', { status: true, msg: playerResponse });
+    this.socket.emit('player.join', {
+        status: true,
+        msg: {
+            player: { id: player.id, username: player.username }
+        }
+    } as ResponseMessage);
     player.socket.on('game.leave', args => this.removePlayer(player));
     player.socket.on('game.players', args => this.emitAllPlayers(player));
     return true;
@@ -50,9 +55,12 @@ export class Game {
           }
       });
 
-      player.socket.emit('game.players', { status: true, msg: {
-          players: playersInActualGame
-      }});
+      player.socket.emit('game.players', {
+          status: true,
+          msg: {
+              players: playersInActualGame
+          }
+      } as ResponseMessage);
   }
 
   public removePlayer(player: Player): boolean {
@@ -61,8 +69,13 @@ export class Game {
     }
     this.players = this.players.filter(p => p.id !== player.id);
     player.disconnect();
-    let playerResponse: PlayerResponse = { id: player.id, username: player.username };
-    this.socket.emit('player.leave', { status: true, msg: playerResponse});
+
+    this.socket.emit('player.leave', {
+        status: true,
+        msg: {
+            player: { id: player.id, username: player.username }
+        }
+    } as ResponseMessage);
     return true;
   }
 
@@ -73,8 +86,13 @@ export class Game {
           player = this.players[Math.floor(Math.random() * this.players.length)];
           setCzarState = this.setCzar(player);
       }
-      let playerResponse: PlayerResponse = { id: player.id, username: player.username };
-      this.socket.emit('player.czar', { status: true, msg: playerResponse });
+
+      this.socket.emit('player.czar', {
+          status: true,
+          msg: {
+              player: { id: player.id, username: player.username }
+          }
+      } as ResponseMessage);
   }
 
   private setCzar(player: Player): boolean {
@@ -93,13 +111,16 @@ export class Game {
           card = BlackCard.cards[Math.floor(Math.random() * BlackCard.cards.length)];
           setBlackCardState = this.setBlackCard(card);
       }
-      this.socket.emit('game.cards.black', { status: true, msg: {
-          card: {
-              id: card.getId(),
-              text: card.getText(),
-              neededAnswers: card.getNeededAnswers()
+      this.socket.emit('game.cards.black', {
+          status: true,
+          msg: {
+              card: {
+                  id: card.getId(),
+                  text: card.getText(),
+                  neededAnswers: card.getNeededAnswers()
+              }
           }
-      }});
+      } as ResponseMessage);
   }
 
   private setBlackCard(card: BlackCard): boolean {
@@ -112,12 +133,12 @@ export class Game {
       }
   }
 
-  private start():void {
+  private start(): void {
     if (this.state !== GameState.lobby) {
       return;
     }
 
-    this.socket.emit('game.start', { status: true });
+    this.socket.emit('game.start', { status: true } as ResponseMessage);
 
     !this.czar ? this.chooseCzar() : '';
     this.chooseBlackCard();
@@ -125,7 +146,12 @@ export class Game {
   }
 
   private emitGameState(): void {
-      this.socket.emit('game.state', { status: true, msg: { state: GameState[this.state] } });
+      this.socket.emit('game.state', {
+          status: true,
+          msg: {
+              state: GameState[this.state]
+          }
+      } as ResponseMessage);
   }
 
   private selection(): void {
@@ -162,5 +188,4 @@ export class Game {
       this.state = GameState.judging;
       this.emitGameState();
   }
-
 }

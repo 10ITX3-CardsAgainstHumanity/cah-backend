@@ -1,11 +1,11 @@
 import { Card } from '../types';
 import { Firestore } from '@google-cloud/firestore';
-import {WhiteCard} from "./WhiteCard";
+import CollectionReference = FirebaseFirestore.CollectionReference;
 
 export class BlackCard implements Card {
 
-    private static db: any = new Firestore().collection('questions');
-    public static cards: any;
+    private static db: CollectionReference = new Firestore().collection('questions');
+    public static cards: BlackCard[];
     private readonly id: string;
     public readonly text: string;
     private readonly neededAnswers: number;
@@ -17,23 +17,25 @@ export class BlackCard implements Card {
     }
 
     private static parseNeededAnswersOfText(text: string): number {
-        return text.match(new RegExp('___', 'g')).length;
+        return text.match(/_+/g).length;
     }
 
-    // @ts-ignore
     public static getById(cardId: string): BlackCard {
-        BlackCard.cards.forEach((card) => {
-            if (card.id === cardId) {
-                return new BlackCard(card.id, card.text);
-            }
-        });
+        return BlackCard.cards.find((card: BlackCard) => card.id === cardId);
     }
 
     public static async init(): Promise<any> {
-        BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
+        try {
+            BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
+            return Promise.resolve();
+        } catch (err) {
+            throw new err;
+            // TODO: Maybe do something better than throwing when a error happens
+            // try init again or reset the complete room and close it down but dont end the whole server like that
+        }
     }
 
-    private static async getAllCardsFromDatabase(): Promise<any[]> {
+    private static async getAllCardsFromDatabase(): Promise<BlackCard[]> {
         try {
             const snapshot = await BlackCard.db.get();
             if (snapshot) {
