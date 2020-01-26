@@ -45,7 +45,13 @@ Create a game as a host
 ### Response
 ```json
 {
-  "status": true
+  "status": true,
+  "msg": {
+    "player": {
+      "id": String,
+      "username": String
+    }
+  }
 }
 ```
 

@@ -54,16 +54,9 @@ export class CahServer {
         allGames[game.id] = game;
         game.addPlayer(player);
 
-        socket.emit('game.create', { status: true } as ResponseMessage);
-        socket.emit('game.join', {
-          status: true,
-          msg: {
-            player: {
-              id: player.id,
-              username: player.username
-            }
-          }
-        } as ResponseMessage);
+        let playerResponse = { player: { id: player.id, username: player.username } };
+        socket.emit('game.create', { status: true, msg: playerResponse } as ResponseMessage);
+        socket.emit('game.join', { status: true, msg: playerResponse } as ResponseMessage);
       });
 
       //game.join
