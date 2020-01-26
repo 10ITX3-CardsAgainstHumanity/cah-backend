@@ -53,7 +53,8 @@ export class Game {
               id: playerInActualGame.id,
               username: playerInActualGame.username,
               score: playerInActualGame.score,
-              isCzar: playerInActualGame.id === this.czar.id
+              isCzar: playerInActualGame.id === this.czar.id,
+              isHost: playerInActualGame.id === this.hostPlayer.id
           }
       });
 
