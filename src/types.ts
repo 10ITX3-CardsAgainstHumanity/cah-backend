@@ -21,6 +21,13 @@ export interface PlayerResponse {
     isCzar?: boolean
 }
 
+export interface allChoosedPlayerCardsResponse {
+    [index: number]: {
+        playerId: string,
+        [cards: number]: Partial<WhiteCard>
+    }
+}
+
 export interface ResponseMessage {
     status: boolean,
     msg?: {

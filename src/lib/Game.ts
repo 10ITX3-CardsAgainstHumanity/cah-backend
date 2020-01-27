@@ -1,4 +1,4 @@
-import {GameState, ResponseMessage} from '../types';
+import {GameState, ResponseMessage, allChoosedPlayerCardsResponse} from '../types';
 import {Player} from './Player';
 import {BlackCard} from "./BlackCard";
 import {WhiteCard} from "./WhiteCard";
@@ -202,15 +202,19 @@ export class Game {
   }
 
   private emitAllChoosedPlayerCards(): void {
-      let msg: any = [];
-      this.players.forEach((player: Player) => {
-          let cards: any = [];
-          player.choosedCards.forEach((card: WhiteCard) => {
-              cards = [ ...cards, { id: card.getId(), text: card.getText() } ];
-          });
-          msg = [ ...msg, { playerId: player.id, cards: cards } ];
+      let data: allChoosedPlayerCardsResponse = this.players.map((player: Player) => {
+          return {
+              playerId: player.id,
+              cards: player.choosedCards.map((card: WhiteCard) => {
+                  return {
+                      id: card.getId(),
+                      text: card.getText()
+                  }
+              })
+          }
       });
-      this.socket.emit('game.players.cards', { status: true, msg: msg } as ResponseMessage);
+
+      this.socket.emit('game.players.cards', { status: true, msg: data } as ResponseMessage);
   }
 
   private judging(): void {
