@@ -13,6 +13,8 @@
         - [Start a game](#start-a-game)
         - [Get all cards of a player](#get-all-cards-of-a-player)
         - [Choose a card during selection](#choose-a-card-during-selection)
+        - [Get all players in current game](#get-all-players-in-current-game)
+        - [Choose a card as czar](#choose-a-card-as-czar)
     - [On](#on)
         - [When a player joined](#when-a-player-joined)
         - [When a player leaved](#when-a-player-leaved)
@@ -21,6 +23,7 @@
         - [When the player card deck is ready](#when-the-player-card-deck-is-ready)
         - [When the game state has changed](#when-the-game-state-has-changed)
         - [When all Player choosed their cards they get every other](#when-all-player-choosed-their-cards-they-get-every-other)
+        - [When the czar choose a winner](#when-the-czar-choosed-a-winner)
 
 # Documentation
 
@@ -288,9 +291,15 @@ Join a game as a player
 }
 ```
 
+| GameState | Trigger | Description |
+| ---: | :--- | :--- |
+| start | The first round must be manual started by the host. Every other round start automatically after the juding state. | A new round is starting up (e.g. choose czar and black card). |  
+| selection | Is emitted automatically after a successful start(up).  | Players can now choose their white cards. |  
+| judging | Is emitted automatically if every player in the round has choose the right amount of white cards. | The czar can now choose the winner card. |
+
 <br />
 
-## When all Player choosed their cards they get every other
+## When all Player choosed their cards, during/after selection phase, cards they get every other
 
     game.players.cards
 

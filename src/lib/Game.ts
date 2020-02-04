@@ -19,7 +19,7 @@ export class Game {
   constructor(hostPlayer: Player, gameId: string, socket: any) {
     this.socket = socket;
     this.id = gameId;
-    this.state = GameState.lobby;
+    this.state = GameState.unstarted;
     this.hostPlayer = hostPlayer;
     this.players = [];
     this.blackCardHistory = [];
@@ -27,11 +27,10 @@ export class Game {
     BlackCard.init();
 
     this.setCzar(hostPlayer);
-    this.hostPlayer.socket.on('game.start', args => this.start());
   }
 
   public addPlayer(player: Player): boolean {
-    if (this.state !== GameState.lobby) {
+    if (this.state !== GameState.unstarted) {
       return false;
     }
     this.players.push(player);
@@ -115,6 +114,7 @@ export class Game {
 
       this.czar = player;
       this.czar.socket.on('game.czar.judge', args => this.czarChooseWinner(args.playerId));
+      this.czar.socket.on('game.start', args => this.start());
       return true;
   }
 
@@ -163,9 +163,8 @@ export class Game {
   }
 
   private start(): void {
-    if (this.state !== GameState.lobby) {
-      return;
-    }
+    this.state = GameState.start;
+    this.emitGameState();
 
     this.socket.emit('game.start', { status: true } as ResponseMessage);
 
@@ -233,18 +232,8 @@ export class Game {
               this.socket.emit('game.czar.judged', { status: true, msg: {
                   player: winnerPlayer
               }} as ResponseMessage);
-              this.overview();
+              this.start();
           }
       }, 2500);
-
-  }
-
-  private overview() : void {
-      this.state = GameState.overview;
-      this.emitGameState();
-      this.emitAllPlayers(this.socket);
-      setTimeout(() => {
-          this.start();
-      }, 5000);
   }
 }

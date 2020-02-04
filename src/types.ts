@@ -3,11 +3,10 @@ import {BlackCard} from "./lib/BlackCard";
 import {Player} from "./lib/Player";
 
 export enum GameState {
-    'undefined',
-    'lobby',
+    'unstarted',
+    'start',
     'selection',
-    'judging',
-    'overview'
+    'judging'
 }
 
 export interface Card {
