@@ -5,7 +5,9 @@
 
 - [cah-backend](#top)
     - [Table of contents](#table-of-contents)
-- [Documentation](#documentation)
+- [Documentation](#documentation) 
+    - Diagrams
+        - [Sequence diagram - user <-> backend](docs/dist/sequence_diagram_cah_user_backend.svg) [*SequenceDiagram.org*](https://sequencediagram.org/)
     - [Emit](#emit)
         - [Create a game](#create-a-game)
         - [Join a game](#join-a-game)

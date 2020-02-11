@@ -1,0 +1,88 @@
+title Sequence diagram - cah - user <-> backend
+
+actor user1
+actor user2
+actor user3
+participant backend
+
+group Game A
+
+group Create new game
+user1->backend: game.create
+activate backend
+backend-->user1: game.create
+backend-->user1: player.cards.ready
+deactivate backend
+end
+
+group Join this game
+user2->backend: game.join
+activate backend
+backend-->user2: game.join
+backend->user1: player.join
+backend-->user2: player.cards.ready
+deactivate backend
+end
+
+group Join this game
+user3->backend: game.join
+activate backend
+backend-->user3: game.join
+backend->user1: player.join
+backend->user2: player.join
+backend-->user3: player.cards.ready
+deactivate backend
+end
+
+group Leave this game
+user3->backend: game.leave
+destroysilent user3
+backend->user1: player.leave
+backend->user2: player.leave
+end
+
+group Czar start round
+user1->backend: game.start
+activate backend
+backend-->user1: game.start
+group game.state
+backend->user1: game.state
+backend->user2: game.state
+end
+backend->user1: game.cards.black
+backend->user2: game.cards.black
+group Emit if round is >= 1 | if round is < 1 czar is host
+backend->user1: player.czar
+backend->user2: player.czar
+end
+deactivate backend
+end
+
+group Selection phase
+activate backend
+note left of backend: game.state
+user1->backend: player.cards.choose
+user2->backend: player.cards.choose
+group If every player choosed card, emit all cards
+backend->user1: game.players.cards
+backend->user2: game.players.cards
+end
+deactivate backend
+end
+
+group Judging phase
+
+activate backend
+note left of backend: game.state
+user1->backend: game.czar.judge
+backend-->user1: game.czar.judge
+group Emit every player that the czar judged, emit winner
+backend->user1: game.czar.judged
+backend->user2: game.czar.judged
+end
+deactivate backend
+end
+
+note left of backend: Loop start with game.start
+
+end
