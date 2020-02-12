@@ -120,7 +120,7 @@ export class Game {
 
   private czarChooseWinner(playerId: string): void {
       if (this.state === GameState.judging) {
-          let validPlayer: Player = this.players.find((player: Player) => player.id === playerId);
+          let validPlayer: Player = this.players.find((player: Player) => (player.id === playerId && player.id !== this.czar.id));
           if (validPlayer) {
               this.czarSelectedWinner = validPlayer;
               this.czarSelectedWinner.countScoreOneUp();
@@ -188,7 +188,7 @@ export class Game {
       let phase = setInterval(() => {
           let areAllPlayersReady = true;
           this.players.forEach((player: Player) => {
-              if (player.choosedCards.length !== this.blackCard.getNeededAnswers()) {
+              if (player.id !== this.czar.id && player.choosedCards.length !== this.blackCard.getNeededAnswers()) {
                   areAllPlayersReady = false
               }
           });
@@ -202,14 +202,16 @@ export class Game {
 
   private emitAllChoosedPlayerCards(): void {
       let data: allChoosedPlayerCardsResponse = this.players.map((player: Player) => {
-          return {
-              playerId: player.id,
-              cards: player.choosedCards.map((card: WhiteCard) => {
-                  return {
-                      id: card.getId(),
-                      text: card.getText()
-                  }
-              })
+          if (player.id !== this.czar.id) {
+              return {
+                  playerId: player.id,
+                  cards: player.choosedCards.map((card: WhiteCard) => {
+                      return {
+                          id: card.getId(),
+                          text: card.getText()
+                      }
+                  })
+              }
           }
       });
 

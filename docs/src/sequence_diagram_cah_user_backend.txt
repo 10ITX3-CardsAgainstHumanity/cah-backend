@@ -61,7 +61,6 @@ end
 group Selection phase
 activate backend
 note left of backend: game.state
-user1->backend: player.cards.choose
 user2->backend: player.cards.choose
 group If every player choosed card, emit all cards
 backend->user1: game.players.cards
