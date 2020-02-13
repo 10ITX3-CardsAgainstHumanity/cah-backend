@@ -164,7 +164,7 @@ Join a game as a player
       {
         "id": String,
         "username": String,
-        "score": Int,
+        "score": Integer,
         "isCzar": Boolean,
         "isHost": Boolean
       }
@@ -336,7 +336,8 @@ Join a game as a player
   "msg": {
     "player": {
       "id": String,
-      "username": String
+      "username": String,
+      "score": Integer
     }
   }
 }

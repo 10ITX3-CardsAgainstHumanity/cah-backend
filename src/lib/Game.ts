@@ -229,7 +229,8 @@ export class Game {
               clearInterval(phase);
               let winnerPlayer: Partial<Player> = {
                   id: this.czarSelectedWinner.id,
-                  username: this.czarSelectedWinner.username
+                  username: this.czarSelectedWinner.username,
+                  score: this.czarSelectedWinner.score
               };
               this.socket.emit('game.czar.judged', { status: true, msg: {
                   player: winnerPlayer
