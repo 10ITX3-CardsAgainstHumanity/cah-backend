@@ -17,7 +17,8 @@ export class BlackCard implements Card {
     }
 
     private static parseNeededAnswersOfText(text: string): number {
-        return text.match(/_+/g).length;
+        let matches: RegExpMatchArray | null = text.match(/_+/g);
+        return matches ? matches.length : 1;
     }
 
     public static getById(cardId: string): BlackCard {
@@ -29,7 +30,7 @@ export class BlackCard implements Card {
             BlackCard.cards = await BlackCard.getAllCardsFromDatabase();
             return Promise.resolve();
         } catch (err) {
-            throw new err;
+            throw new Error(err);
             // TODO: Maybe do something better than throwing when a error happens
             // try init again or reset the complete room and close it down but dont end the whole server like that
         }
