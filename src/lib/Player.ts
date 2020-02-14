@@ -25,7 +25,7 @@ export class Player {
   }
 
   private _getAllCardTexts(): void {
-      this.socket.emit('player.cards', { status: true, msg: { cards: this.getAllCards() }} as ResponseMessage);
+      this.socket.emit('player.cards', { status: true, msg: { cards: this.whiteCards }} as ResponseMessage);
   }
 
   private async fillCardDeck(): Promise<void> {
@@ -53,12 +53,6 @@ export class Player {
       return Promise.resolve();
   }
 
-  private getAllCards(): WhiteCard[] {
-      return this.whiteCards.map((card) => {
-         return card;
-      });
-  }
-
   public hasPlayerThisCard(card: WhiteCard): boolean {
       let whiteCardsIds = this.whiteCards.map((c: WhiteCard) => {
           return c.getId();
@@ -82,7 +76,6 @@ export class Player {
       if (index > -1) {
         this.whiteCards.splice(index, 1);
       }
-
 
       this.socket.emit('player.cards.choose', { status: true } as ResponseMessage);
   }
