@@ -15,6 +15,7 @@ export class Game {
   private blackCardHistory: Array<BlackCard>;
   private players: Array<Player>;
   private czarSelectedWinner: Player;
+  private round: number;
 
   constructor(hostPlayer: Player, gameId: string, socket: any) {
     this.socket = socket;
@@ -23,6 +24,7 @@ export class Game {
     this.hostPlayer = hostPlayer;
     this.players = [];
     this.blackCardHistory = [];
+    this.round = 0;
 
     BlackCard.init();
 
@@ -165,9 +167,7 @@ export class Game {
   private start(): void {
     this.state = GameState.start;
     this.emitGameState();
-
-    this.socket.emit('game.start', { status: true } as ResponseMessage);
-
+    !this.round ? this.socket.emit('game.start', { status: true } as ResponseMessage) : '';
     !this.czar ? this.chooseCzar() : '';
     this.chooseBlackCard();
     this.selection();
@@ -235,6 +235,7 @@ export class Game {
               this.socket.emit('game.czar.judged', { status: true, msg: {
                   player: winnerPlayer
               }} as ResponseMessage);
+              this.round++;
               this.start();
           }
       }, 2500);
