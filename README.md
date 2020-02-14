@@ -26,6 +26,7 @@
         - [When the game state has changed](#when-the-game-state-has-changed)
         - [When all Player choosed their cards they get every other](#when-all-player-choosed-their-cards-they-get-every-other)
         - [When the czar choose a winner](#when-the-czar-choosed-a-winner)
+        - [When the player gets a new card](#when-the-player-gets-a-new-card)
 
 # Documentation
 
@@ -338,6 +339,25 @@ Join a game as a player
       "id": String,
       "username": String,
       "score": Integer
+    }
+  }
+}
+```
+
+<br />
+
+## When the player gets a new card
+
+    player.card
+    
+### Response
+```json
+{
+  "status": true,
+  "msg": {
+    "card": {
+      "id": String,
+      "text": String
     }
   }
 }

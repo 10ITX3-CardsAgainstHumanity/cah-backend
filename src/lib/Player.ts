@@ -8,7 +8,7 @@ export class Player {
   public readonly username: string;
   public readonly socket: Socket;
   public score: number;
-  public readonly choosedCards: Array<WhiteCard>;
+  public choosedCards: Array<WhiteCard>;
   public readonly whiteCards: Array<WhiteCard>;
 
   constructor(username: string, socket: Socket) {
@@ -18,7 +18,7 @@ export class Player {
     this.score = 0;
     this.choosedCards = [];
     this.whiteCards = [];
-    this.fillCardDeck().then(() => { this.socket.emit('player.cards.ready', { status: true } as ResponseMessage) });
+    this.fillCardDeck(false).then(() => { this.socket.emit('player.cards.ready', { status: true } as ResponseMessage) });
 
     this.socket.on('player.cards', args => this._getAllCardTexts());
     this.socket.on('player.cards.choose', args => this._chooseCard(args.cardId));
@@ -28,13 +28,13 @@ export class Player {
       this.socket.emit('player.cards', { status: true, msg: { cards: this.whiteCards }} as ResponseMessage);
   }
 
-  private async fillCardDeck(): Promise<void> {
+  private async fillCardDeck(notifyUser: boolean = false): Promise<void> {
       while (this.whiteCards.length < 10) {
-          await this.addCard();
+          await this.addCard(notifyUser);
       }
   }
 
-  private async addCard(): Promise<void> {
+  private async addCard(notifyUser: boolean): Promise<void> {
       let isNewCardValid: boolean = false;
       while (!isNewCardValid) {
           let newCard = new WhiteCard();
@@ -47,6 +47,7 @@ export class Player {
           });
           if (_isNewCardValid) {
               this.whiteCards.push(newCard);
+              notifyUser ? this.socket.emit('player.card', { status: true, msg: { card: newCard }} as ResponseMessage) : '';
               isNewCardValid = true;
           }
       }
