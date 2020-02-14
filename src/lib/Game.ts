@@ -167,8 +167,8 @@ export class Game {
   private start(): void {
     this.state = GameState.start;
     this.emitGameState();
-    !this.round ? this.socket.emit('game.start', { status: true } as ResponseMessage) : '';
-    !this.czar ? this.chooseCzar() : '';
+    !this.round ? this.socket.emit('game.start', { status: true } as ResponseMessage) : ''; // only emit game.start at round 0
+    this.round ? this.chooseCzar() : ''; // only choose czar at round >0
     this.chooseBlackCard();
     this.selection();
   }
@@ -235,6 +235,9 @@ export class Game {
               this.socket.emit('game.czar.judged', { status: true, msg: {
                   player: winnerPlayer
               }} as ResponseMessage);
+              this.players.forEach((player: Player) => {
+                  player.prepareForNextRound();
+              });
               this.round++;
               this.start();
           }

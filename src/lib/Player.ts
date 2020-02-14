@@ -34,6 +34,11 @@ export class Player {
       }
   }
 
+  public prepareForNextRound(): void {
+      this.choosedCards = [];
+      this.fillCardDeck(true);
+  }
+
   private async addCard(notifyUser: boolean): Promise<void> {
       let isNewCardValid: boolean = false;
       while (!isNewCardValid) {
