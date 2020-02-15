@@ -177,7 +177,7 @@ export class Game {
       this.socket.emit('game.state', {
           status: true,
           msg: {
-              state: GameState[this.state]
+              state: this.state
           }
       } as ResponseMessage);
   }

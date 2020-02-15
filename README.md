@@ -289,7 +289,7 @@ Join a game as a player
 {
   "status": true,
   "msg": {
-    "state": /src/types.ts->GameState
+    "state": /src/types.ts->GameState as Index
   }
 }
 ```

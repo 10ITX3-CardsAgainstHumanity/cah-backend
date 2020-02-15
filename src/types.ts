@@ -30,7 +30,7 @@ export interface allChoosedPlayerCardsResponse {
 export interface ResponseMessage {
     status: boolean,
     msg?: {
-        state?: keyof typeof GameState
+        state?: GameState
         player?: PlayerResponse,
         players?: Partial<Player>[]
         card?: Partial<BlackCard>,
