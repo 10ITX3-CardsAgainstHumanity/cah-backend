@@ -4,4 +4,4 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME' ]
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: [ 'beta', 'run', 'deploy', '$BRANCH_NAME-cah-backend', '--image', 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME', '--update-env-vars', 'ENV=$_ENV,SENTRY_DSN=$_SENTRY_DSN', '--platform', 'managed', '--region', 'europe-west1','--memory', '256Mi', '--timeout', '900', '--concurrency', '100', '--allow-unauthenticated' ]
+    args: [ 'beta', 'run', 'deploy', '$BRANCH_NAME-cah-backend', '--image', 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME', '--set-env-vars', 'ENV=$_ENV,SENTRY_DSN=$_SENTRY_DSN', '--platform', 'managed', '--region', 'europe-west1','--memory', '256Mi', '--timeout', '900', '--concurrency', '100', '--allow-unauthenticated' ]
