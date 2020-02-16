@@ -14,7 +14,7 @@
         - [Leave a game](#leave-a-game)
         - [Start a game](#start-a-game)
         - [Get all cards of a player](#get-all-cards-of-a-player)
-        - [Choose a card during selection](#choose-a-card-during-selection)
+        - [Choose a card during selection](#choose-a-set-of-cards-during-selection)
         - [Get all players in current game](#get-all-players-in-current-game)
         - [Choose a card as czar](#choose-a-card-as-czar)
     - [On](#on)

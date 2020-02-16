@@ -201,7 +201,8 @@ export class Game {
   }
 
   private emitAllChoosedPlayerCards(): void {
-      let data: allChoosedPlayerCardsResponse = this.players.map((player: Player) => {
+      let players: Player[] = this.players.filter(player => player.choosedCards.length > 0);
+      let data: allChoosedPlayerCardsResponse = players.map((player: Player) => {
           if (player.id !== this.czar.id) {
               return {
                   playerId: player.id,
