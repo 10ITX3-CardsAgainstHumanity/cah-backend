@@ -132,14 +132,14 @@ Join a game as a player
 
 <br />
 
-## Choose a card during selection
+## Choose a set of cards during selection
 
     player.cards.choose
 
 ### Request
 ```json
 {
-  "cardId": String
+  "cardIds": [ String ]
 }
 ```
 

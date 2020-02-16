@@ -21,7 +21,7 @@ export class Player {
     this.fillCardDeck(false).then(() => { this.socket.emit('player.cards.ready', { status: true } as ResponseMessage) });
 
     this.socket.on('player.cards', args => this._getAllCardTexts());
-    this.socket.on('player.cards.choose', args => this._chooseCard(args.cardId));
+    this.socket.on('player.cards.choose', args => this._chooseCards(args.cardIds));
   }
 
   private _getAllCardTexts(): void {
@@ -66,14 +66,16 @@ export class Player {
       return whiteCardsIds.includes(card.getId());
   }
 
-  public _chooseCard(cardId: string): void {
-      let card: WhiteCard = WhiteCard.getById(cardId);
-      this.chooseCard(card);
+  public _chooseCards(cardIds: string[]): void {
+      cardIds.forEach((cardId) => {
+         let card: WhiteCard = WhiteCard.getById(cardId);
+         this.chooseCard(card);
+      });
   }
 
   public chooseCard(card: WhiteCard): void {
       if (!this.hasPlayerThisCard(card)) {
-          this.socket.emit('player.cards.choose', { status: false, msg: 'Player does not have this card' } as ResponseMessage);
+          this.socket.emit('player.cards.choose', { status: false, msg: card.getId() } as ResponseMessage);
       }
 
       this.choosedCards.push(card);
