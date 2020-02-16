@@ -37,7 +37,7 @@ export class Game {
     }
     this.players.push(player);
     player.socket.join(this.id);
-    this.socket.emit('player.join', {
+    this.socket.to(this.id).emit('player.join', {
         status: true,
         msg: {
             player: { id: player.id, username: player.username }
@@ -74,7 +74,7 @@ export class Game {
     this.players = this.players.filter(p => p.id !== player.id);
     player.disconnect();
 
-    this.socket.emit('player.leave', {
+    this.socket.to(this.id).emit('player.leave', {
         status: true,
         msg: {
             player: { id: player.id, username: player.username }
@@ -101,7 +101,7 @@ export class Game {
           setCzarState = this.setCzar(player);
       }
 
-      this.socket.emit('player.czar', {
+      this.socket.to(this.id).emit('player.czar', {
           status: true,
           msg: {
               player: { id: player.id, username: player.username }
@@ -142,7 +142,7 @@ export class Game {
           card = BlackCard.cards[Math.floor(Math.random() * BlackCard.cards.length)];
           setBlackCardState = this.setBlackCard(card);
       }
-      this.socket.emit('game.cards.black', {
+      this.socket.to(this.id).emit('game.cards.black', {
           status: true,
           msg: {
               card: {
@@ -167,14 +167,14 @@ export class Game {
   private start(): void {
     this.state = GameState.start;
     this.emitGameState();
-    !this.round ? this.socket.emit('game.start', { status: true } as ResponseMessage) : ''; // only emit game.start at round 0
+    !this.round ? this.socket.to(this.id).emit('game.start', { status: true } as ResponseMessage) : ''; // only emit game.start at round 0
     this.round ? this.chooseCzar() : ''; // only choose czar at round >0
     this.chooseBlackCard();
     this.selection();
   }
 
   private emitGameState(): void {
-      this.socket.emit('game.state', {
+      this.socket.to(this.id).emit('game.state', {
           status: true,
           msg: {
               state: this.state
@@ -215,7 +215,7 @@ export class Game {
           }
       });
 
-      this.socket.emit('game.players.cards', { status: true, msg: data } as ResponseMessage);
+      this.socket.to(this.id).emit('game.players.cards', { status: true, msg: data } as ResponseMessage);
   }
 
   private judging(): void {
@@ -232,7 +232,7 @@ export class Game {
                   username: this.czarSelectedWinner.username,
                   score: this.czarSelectedWinner.score
               };
-              this.socket.emit('game.czar.judged', { status: true, msg: {
+              this.socket.to(this.id).emit('game.czar.judged', { status: true, msg: {
                   player: winnerPlayer
               }} as ResponseMessage);
               this.players.forEach((player: Player) => {
