@@ -1,0 +1,100 @@
+<script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+<script>
+
+  var socket = io('http://localhost');
+
+  // game.create
+
+  function createGame(username, gameId) {
+	socket.emit('game.create', { username: username, gameId: gameId });
+  }
+
+  socket.on('game.create', data => console.log('game.create', data));
+
+  // game.join
+
+  function joinGame(username, gameId) {
+    socket.emit('game.join', { username: username, gameId: gameId });
+  }
+
+  socket.on('game.join', data => console.log('game.join', data));
+
+  // game.leave
+
+  function leaveGame() {
+      socket.emit('game.leave');
+  }
+
+  // game.start
+
+  function startGame() {
+      socket.emit('game.start');
+  }
+
+  socket.on('game.start', data => console.log('game.start', data));
+
+  // player.cards
+
+  function getAllCardTexts() {
+      socket.emit('player.cards', {});
+  }
+
+  socket.on('player.cards', data => console.log('player.cards', data));
+
+  // player.cards.choose
+
+  function chooseCard(cardId) {
+      socket.emit('player.cards.choose', { cardId: cardId });
+  }
+
+  socket.on('player.cards.choose', data => console.log('player.cards.choose', data));
+
+  // game.player
+
+  function getAllPlayers() {
+      socket.emit('game.players');
+  }
+
+  socket.on('game.players', data => console.log('game.players', data));
+
+  // game.czar.judge
+
+  function judgeAsCzar(playerId) {
+      socket.emit('game.czar.judge', { playerId: playerId });
+  }
+
+  socket.on('game.czar.judge', data => console.log('game.czar.judge', data));
+
+  // game.czar.judged
+
+  socket.on('game.czar.judged', data => console.log('game.czar.judged', data));
+
+  // player.join
+
+  socket.on('player.join', data => console.log('player.join', data));
+
+  // player.leave
+
+  socket.on('player.leave', data => console.log('player.leave', data));
+
+  // player.czar
+
+  socket.on('player.czar', data => console.log('player.czar', data));
+
+  // game.cards.black
+
+  socket.on('game.cards.black', data => console.log('game.cards.black', data));
+
+  // game.state
+
+  socket.on('game.state', data => console.log('game.state', data));
+
+  // player.cards.ready
+
+  socket.on('player.cards.ready', data => console.log('player.cards.ready', data));
+
+  // game.players.cards
+
+  socket.on('game.players.cards', data => console.log('game.players.cards', data));
+
+</script>

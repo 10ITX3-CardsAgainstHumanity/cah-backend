@@ -1,0 +1,12 @@
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+
+# log files
+*.log
+
+# compiled output
+/dist
+class_diagram.puml
