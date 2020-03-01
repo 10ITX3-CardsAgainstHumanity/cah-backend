@@ -1,10 +1,9 @@
-import { Card } from '../types';
-import { Firestore } from '@google-cloud/firestore';
-import CollectionReference = FirebaseFirestore.CollectionReference;
+import {Card} from '../types';
+import {CahDatabase, CardTypes} from "./CahDatabase";
 
 export class BlackCard implements Card {
 
-    private static db: CollectionReference = new Firestore().collection('questions');
+    private static db: CahDatabase = CahDatabase.instance;
     public static cards: BlackCard[];
     private readonly id: string;
     public readonly text: string;
@@ -38,11 +37,11 @@ export class BlackCard implements Card {
 
     private static async getAllCardsFromDatabase(): Promise<BlackCard[]> {
         try {
-            const snapshot = await BlackCard.db.get();
+            const snapshot = await BlackCard.db.getAllCards(CardTypes.blackCards);
             if (snapshot) {
-                return snapshot.docs.map((doc: any) => {
-                    return new BlackCard(doc.id, doc.data().text);
-                });
+                return snapshot.map((doc: any) => {
+                    return new BlackCard(doc.uid, doc.text);
+                })
             }
         } catch (err) {
             throw new Error(err);
