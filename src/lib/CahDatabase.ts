@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-interface ICardData {
+export interface ICardData {
     uid: string,
     text: string
 }
@@ -43,7 +43,7 @@ export class CahDatabase {
         return this._data[CardTypes[cardTypes]];
     }
 
-    public getRandomCard(cardTypes: CardTypes) {
+    public getRandomCard(cardTypes: CardTypes): ICardData {
         const cards: ICardData[] = this._data[CardTypes[cardTypes]];
         return cards[CahDatabase.getRandomKey(cards)];
     }

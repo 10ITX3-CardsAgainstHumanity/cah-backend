@@ -1,5 +1,5 @@
 import {Card} from '../types';
-import {CahDatabase, CardTypes} from "./CahDatabase";
+import {CahDatabase, CardTypes, ICardData} from "./CahDatabase";
 
 export class WhiteCard implements Card {
 
@@ -33,9 +33,9 @@ export class WhiteCard implements Card {
 
     private static async getAllCardsFromDatabase(): Promise<WhiteCard[]> {
         try {
-            const snapshot = await WhiteCard.db.getAllCards(CardTypes.whiteCards);
+            const snapshot: ICardData[] = await WhiteCard.db.getAllCards(CardTypes.whiteCards);
             if (snapshot) {
-                return snapshot.map((doc: any) => {
+                return snapshot.map((doc: ICardData) => {
                    return new WhiteCard(doc.uid, doc.text);
                 });
             }
