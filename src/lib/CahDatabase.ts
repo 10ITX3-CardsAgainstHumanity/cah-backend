@@ -29,7 +29,7 @@ export class CahDatabase {
     }
 
     public async init(): Promise<void> {
-        const dataBuffer: Buffer = await fs.readFileSync(__dirname + '/../database.json');
+        const dataBuffer: Buffer = await fs.readFileSync(__dirname + '/../../database.json');
         this._data = JSON.parse(dataBuffer.toString()) as IData;
     }
 
