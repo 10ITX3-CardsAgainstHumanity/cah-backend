@@ -5,6 +5,7 @@ import {Game} from './Game';
 import {Player} from './Player';
 import {Socket} from "socket.io";
 import {ResponseMessage} from "../types";
+import {CahDatabase} from "./CahDatabase";
 
 export class CahServer {
 
@@ -16,6 +17,7 @@ export class CahServer {
   constructor() {
     this.initServer();
     this.initSocketIo();
+    this.initDatabase();
     this.listen();
   }
 
@@ -26,6 +28,13 @@ export class CahServer {
 
   private initSocketIo(): void {
     this.io = socketIo(this.server);
+  }
+
+  private initDatabase(): void {
+    const db: CahDatabase = CahDatabase.instance;
+    db.init().then(() => {
+      console.log('database is ready');
+    });
   }
 
   private listen(): void {
