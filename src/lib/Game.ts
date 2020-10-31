@@ -5,7 +5,6 @@ import {WhiteCard} from "./WhiteCard";
 import {Socket} from "socket.io";
 
 export class Game {
-
   public readonly id: string;
   public socket: Socket;
   private state: GameState;

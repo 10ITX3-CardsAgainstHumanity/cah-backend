@@ -8,7 +8,6 @@ import {ResponseMessage} from "../types";
 import {CahDatabase} from "./CahDatabase";
 
 export class CahServer {
-
   public static readonly PORT: number = 80;
   private server: Server;
   private io: SocketIO.Server;

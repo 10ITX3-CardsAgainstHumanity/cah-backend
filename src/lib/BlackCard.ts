@@ -2,7 +2,6 @@ import {Card} from '../types';
 import {CahDatabase, CardTypes, ICardData} from "./CahDatabase";
 
 export class BlackCard implements Card {
-
     private static db: CahDatabase = CahDatabase.instance;
     public static cards: BlackCard[];
     private readonly id: string;

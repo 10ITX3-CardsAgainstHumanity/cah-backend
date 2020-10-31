@@ -3,7 +3,6 @@ import { WhiteCard } from './WhiteCard';
 import {ResponseMessage} from "../types";
 
 export class Player {
-
   public readonly id: string;
   public readonly username: string;
   public readonly socket: Socket;
@@ -97,5 +96,4 @@ export class Player {
       //this.socket.removeAllListeners();
       this.socket.disconnect();
   }
-
 }

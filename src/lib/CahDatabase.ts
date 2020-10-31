@@ -16,12 +16,10 @@ export enum CardTypes {
 }
 
 export class CahDatabase {
-
     private static _instance: CahDatabase;
     private _data: IData;
 
-    private constructor() {
-    }
+    private constructor() {}
 
     public static get instance() {
         !CahDatabase._instance ? CahDatabase._instance = new CahDatabase() : '';
@@ -47,5 +45,4 @@ export class CahDatabase {
         const cards: ICardData[] = this._data[CardTypes[cardTypes]];
         return cards[CahDatabase.getRandomKey(cards)];
     }
-
 }

@@ -2,7 +2,6 @@ import {Card} from '../types';
 import {CahDatabase, CardTypes, ICardData} from "./CahDatabase";
 
 export class WhiteCard implements Card {
-
     private static db: CahDatabase = CahDatabase.instance;
     public static cards: Array<WhiteCard> = [];
     private id: string;
@@ -53,5 +52,4 @@ export class WhiteCard implements Card {
     public getText(): string {
         return this.text;
     }
-
 }
