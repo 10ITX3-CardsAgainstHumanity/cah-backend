@@ -362,5 +362,4 @@ Join a game as a player
   }
 }
 ```
-
 <br />
