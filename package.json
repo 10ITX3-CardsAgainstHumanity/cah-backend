@@ -24,7 +24,7 @@
   "dependencies": {
     "@sentry/node": "^5.11.2",
     "debug": "^4.1.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {
     "@sentry/types": "^5.11.0",
